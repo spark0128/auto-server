@@ -49,8 +49,7 @@ export default (app) => {
                 res.send(updatedDoc);
                 res.status(200).end();
               }
-            }
-          );
-    });
-}
+            });
+        });
+    }
 
