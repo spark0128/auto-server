@@ -33,4 +33,15 @@ export default (app) => {
     const car = await new CarModel(req.body).save();
     res.send(car);
   });
+
+  /**
+   * @api {put} /cars/:carId UpdateCar
+   * @apiName UpdateCar
+   * @apiGroup Car
+   */
+  app.put('/v1/cars/:carId', async (req, res) => {
+    // TODO: Validate body
+    const car = await CarModel.findByIdAndUpdate(req.params.carId, req.body);
+    res.send(car);
+  });
 }

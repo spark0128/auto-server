@@ -11,10 +11,6 @@ export default (app) => {
     // TODO: Implementation
   });
 
-  app.post('/v1/users/me/profile-image', (req, res) => {
-    // TODO: Implementation
-  });
-
   app.get('/v1/users/me/favorite-cars', (req, res) => {
     // TODO: Implementation
   });

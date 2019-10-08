@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { ImageSchema } from './Image';
 
 export const CarSchema = new Schema({
   condition: {
@@ -47,6 +48,7 @@ export const CarSchema = new Schema({
   brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
   model: { type: Schema.Types.ObjectId, ref: 'Model' },
   modelDetail: { type: Schema.Types.ObjectId, ref: 'ModelDetail' },
+  images: [{ type: Schema.Types.ObjectId, ref: 'Image' }],
 });
 
 export const CarModel = mongoose.model('Car', CarSchema, 'cars');

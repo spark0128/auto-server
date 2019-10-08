@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { ImageSchema } from './Image';
 
 export const UserSchema = new Schema({
   username: {
@@ -19,6 +20,7 @@ export const UserSchema = new Schema({
     enum: ['Customer', 'Individual', 'Dealer'],
     default: 'Customer',
   },
+  profileImage: ImageSchema,
   firstName: String,
   lastName: String,
   email: String,
