@@ -36,12 +36,16 @@ db.once('open', async () => {
       // Upsert a Model
       const m = await ModelModel.findOneAndUpdate({ name: model.name }, {
         name: model.name,
+        brand: b._id,
       }, { upsert: true })
         .populate('modelDetails')
         .exec();
       // Upsert ModelDetails
       const modelDetails = await Promise.all((model.modelDetails || []).map(async (modelDetail) => {
-        return await ModelDetailModel.findOneAndUpdate({ name: modelDetail.name }, modelDetail, { upsert: true });
+        return await ModelDetailModel.findOneAndUpdate({ name: modelDetail.name }, {
+          name: modelDetail.name,
+          model: m._id,
+        }, { upsert: true });
       }));
       // Save ModelDetails to Model
       m.modelDetails = modelDetails;

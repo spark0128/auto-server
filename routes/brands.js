@@ -1,4 +1,6 @@
 import { BrandModel } from '../models/Brand';
+import { ModelModel } from '../models/Model';
+import { ModelDetailModel } from '../models/ModelDetail';
 
 export default (app) => {
   /**
@@ -7,16 +9,36 @@ export default (app) => {
    * @apiGroup Brand
    */
   app.get('/v1/brands', async (req, res) => {
-    const brands = await BrandModel.find() || [];
+    const brands = await BrandModel.find()
+      .populate('numCars')
+      .populate('numModels')
+      .exec() || [];
     res.send({ brands });
   });
 
+  /**
+   * @api {get} /brands/:brandId/models GetModels
+   * @apiName GetModels
+   * @apiGroup Brand
+   */
   app.get('/v1/brands/:brandId/models', async (req, res) => {
-    // TODO: Implementation
+    const models = await ModelModel.find({ brand: req.params.brandId })
+      .populate('numCars')
+      .populate('numModelDetails')
+      .exec() || [];
+    res.send({ models });
   });
 
-  app.get('/v1/brands/:brandId/models/:modelId/model-details', async (req, res) => {
-    // TODO: Implementation
+  /**
+   * @api {get} /models/:modelId/model-details GetModelDetails
+   * @apiName GetModelDetails
+   * @apiGroup Brand
+   */
+  app.get('/v1/models/:modelId/model-details', async (req, res) => {
+    const modelDetails = await ModelDetailModel.find({ model: req.params.modelId })
+      .populate('numCars')
+      .exec() || [];
+    res.send({ modelDetails });
   });
 }
 
