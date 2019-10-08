@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import { users, cars, brands } from './data';
+import { users, brands } from './data';
 import { UserModel } from '../models/User';
-import { CarModel } from '../models/Car';
 import { BrandModel } from '../models/Brand';
 
 mongoose.connect('mongodb+srv://automate:Tjddn128@car-db-tmwmy.mongodb.net/test?retryWrites=true&w=majority');
@@ -26,6 +25,7 @@ db.once('open', () => {
   //     console.error(error);
   //   }
   // });
+
   // CarModel.insertMany(cars, (error) => {
   //   if (error) {
   //     console.error(error);
