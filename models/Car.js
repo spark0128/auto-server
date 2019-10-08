@@ -19,7 +19,7 @@ export const CarSchema = new Schema({
   fuelType: {
     type: String,
     required: true,
-    enum: ['Diesel', 'Gasoline', 'Hybrid'],
+    enum: ['Diesel', 'Gasoline', 'Hybrid', 'LPG', 'Electric'],
   },
   carTypes: [{
     type: String,
@@ -41,6 +41,8 @@ export const CarSchema = new Schema({
   displacement: String,
   fuelEfficiency: String,
   gearbox: String,
+  color: String,
+  location: String,
 
   brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
   model: { type: Schema.Types.ObjectId, ref: 'Model' },
