@@ -16,8 +16,11 @@ db.once('open', () => {
   // UserModel.insertMany(users, (error) => {
   //   if (error) {
   //     console.error(error);
+  //   } else {
+  //     console.log('Inserted users');
   //   }
   // });
+
   // BrandModel.insertMany(brands, (error) => {
   //   if (error) {
   //     console.error(error);
