@@ -1,8 +1,9 @@
-import mongoose from 'mongoose';
-import { users, cars, brands } from './data';
+import mongoose, { Model } from 'mongoose';
+import { users, brands } from './data';
 import { UserModel } from '../models/User';
-import { CarModel } from '../models/Car';
 import { BrandModel } from '../models/Brand';
+import { ModelModel } from '../models/Model';
+import { ModelDetailModel } from '../models/ModelDetail';
 
 mongoose.connect('mongodb+srv://automate:Tjddn128@car-db-tmwmy.mongodb.net/test?retryWrites=true&w=majority');
 const db = mongoose.connection;
@@ -11,31 +12,48 @@ db.on('error', (error) => {
   console.error(error);
 });
 
-db.once('open', () => {
+db.once('open', async () => {
   console.log('Database connection is open!');
   // UserModel.insertMany(users, (error) => {
   //   if (error) {
   //     console.error(error);
+  //   } else {
+  //     console.log('Inserted users');
   //   }
   // });
-  // BrandModel.insertMany(brands, (error) => {
-  //   if (error) {
-  //     console.error(error);
-  //   }
-  // });
-  // CarModel.insertMany(cars, (error) => {    
-  //   if (error) {
-  //     console.error(error);
-  //   }
-    // TODO: carTypes, brand를 추가    
 
-    /**
-     * 필드 이름 바꾸기
-     * 업데이트 시 기존 Model에 기존 필드, 새로운 이름의 필드 둘다 있어야한다
-    CarModel.update({}, { $rename: { categories: 'carTypes' } }, { multi: true }, function(err, blocks) {
-      if(err) { throw err; }
-      console.log('Done!');
-    });
-    */
+  // Upsert Brands
+  await Promise.all(brands.map(async (brand) => {
+    // Upsert a Brand
+    const b = await BrandModel.findOneAndUpdate({ name: brand.name }, {
+      name: brand.name,
+    }, { upsert: true })
+      .populate('models')
+      .exec();
 
+    // Upsert Models
+    const models = await Promise.all((brand.models || []).map(async (model) => {
+      // Upsert a Model
+      const m = await ModelModel.findOneAndUpdate({ name: model.name }, {
+        name: model.name,
+        brand: b._id,
+      }, { upsert: true })
+        .populate('modelDetails')
+        .exec();
+      // Upsert ModelDetails
+      const modelDetails = await Promise.all((model.modelDetails || []).map(async (modelDetail) => {
+        return await ModelDetailModel.findOneAndUpdate({ name: modelDetail.name }, {
+          name: modelDetail.name,
+          model: m._id,
+        }, { upsert: true });
+      }));
+      // Save ModelDetails to Model
+      m.modelDetails = modelDetails;
+      return await m.save();
+    }));
+
+    // Save Models to Brand
+    b.models = models;
+    return await b.save();
+  }));
 });
