@@ -5,7 +5,6 @@ export const CarSchema = new Schema({
   brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
   price: Number,
   owner: { type: Schema.Types.ObjectId, ref: 'User' },
-  carTypes: [{ type: Schema.Types.ObjectId, ref: 'CarType' }],
   images: [String],
   condition: String,
 });

@@ -5,7 +5,6 @@ import db from './db';
 import getUserRoutes from './routes/users';
 import getCarRoutes from './routes/cars';
 import getBrandRoutes from './routes/brands';
-import getCarTypeRoutes from './routes/carTypes';
 import getAuthRoutes from './routes/auth';
 
 const app = express();

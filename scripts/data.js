@@ -34,13 +34,6 @@ export const brands = [
   {name: "Rolls-Royce", image: "https://i.imgur.com/pFIJR5b.png"},
 ];
 
-export const carTypes = [
-  {name: "sedan", image: ""},
-  {name: "luxury", image: ""},
-  {name: "truck", image: ""},
-  // TODO: 모든 CarType 추가
-];
-
 export const cars = [
   { name: 'Toyota Prius 2016', price: 3999, carTypes: ['sedan'], brand: "BMW", images: ['https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2047&q=80', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80'] },
   { name: 'Bentley Luxury Car', price: 24999, carTypes: ['sedan', 'luxury'], brand: "BMW", images: ['https://images.unsplash.com/photo-1471289549423-04adaecfa1f1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2400&q=80']},

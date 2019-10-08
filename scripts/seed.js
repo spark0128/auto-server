@@ -26,19 +26,8 @@ db.once('open', () => {
   //     console.error(error);
   //   }
   // });
-  // CarModel.insertMany(cars, (error) => {    
+  // CarModel.insertMany(cars, (error) => {
   //   if (error) {
   //     console.error(error);
   //   }
-    // TODO: carTypes, brand를 추가    
-
-    /**
-     * 필드 이름 바꾸기
-     * 업데이트 시 기존 Model에 기존 필드, 새로운 이름의 필드 둘다 있어야한다
-    CarModel.update({}, { $rename: { categories: 'carTypes' } }, { multi: true }, function(err, blocks) {
-      if(err) { throw err; }
-      console.log('Done!');
-    });
-    */
-
 });
