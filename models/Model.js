@@ -4,6 +4,7 @@ export const ModelSchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
 
   brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
@@ -11,4 +12,4 @@ export const ModelSchema = new Schema({
   cars: [{ type: Schema.Types.ObjectId, ref: 'Car' }],
 });
 
-export const Model = mongoose.model('Model', ModelSchema, 'models');
+export const ModelModel = mongoose.model('Model', ModelSchema, 'models');

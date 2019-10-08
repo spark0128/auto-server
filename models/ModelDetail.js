@@ -4,6 +4,7 @@ export const ModelDetailSchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   yearRange: String,
 
@@ -11,4 +12,4 @@ export const ModelDetailSchema = new Schema({
   cars: [{ type: Schema.Types.ObjectId, ref: 'Car' }],
 });
 
-export const ModelDetail = mongoose.model('ModelDetail', ModelSchema, 'model-details');
+export const ModelDetailModel = mongoose.model('ModelDetail', ModelDetailSchema, 'model-details');

@@ -11,6 +11,24 @@ export const brands = [
   {
     name: "Lexus",
     image: "https://i.imgur.com/kp27DPn.png",
+    models: [
+      {
+        name: "CT200h",
+        modelDetails: [
+          { name: "1.8" },
+          { name: "1.8 F Sport" },
+          { name: "1.8 Luxury" },
+        ],
+      },
+      {
+        name: "ES250",
+        modelDetails: [
+          { name: "2.5" },
+          { name: "2.5 Luxury" },
+          { name: "2.5 Premium" },
+        ],
+      },
+    ]
   },
   {
     name: "Toyota",

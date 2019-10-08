@@ -1,6 +1,11 @@
 import { BrandModel } from '../models/Brand';
 
 export default (app) => {
+  /**
+   * @api {get} /brands GetBrands
+   * @apiName GetBrands
+   * @apiGroup Brand
+   */
   app.get('/v1/brands', async (req, res) => {
     const brands = await BrandModel.find() || [];
     res.send({ brands });
