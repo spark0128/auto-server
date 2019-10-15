@@ -43,7 +43,7 @@ export default (app) => {
 
     const { phoneNumber } = req.body;
     const code = generateRandom6DigitNumber();
-    const message = await client.messages
+    await client.messages
       .create({
         body: `Verification code is ${code}`,
         from: '+12294698213',
@@ -51,7 +51,6 @@ export default (app) => {
       });
 
     const verification = await new PhoneVerificationModel({
-      id: message.sid,
       phoneNumber,
       code,
     }).save();
@@ -78,11 +77,11 @@ export default (app) => {
     const verification = await PhoneVerificationModel.findById(verificationId);
     if (!verification) {
       // TODO: Enhance error handling
-      return res.sendStatus(404);
+      return res.status(404).send({ message: 'Not found verification' });
     }
     if (verification.code !== code) {
       // TODO: Enhance error handling
-      return res.sendStatus(409);
+      return res.status(409).send({ message: 'Invalid code' });
     }
 
     verification.status = 'Verified';
@@ -144,7 +143,8 @@ export default (app) => {
       password: encryptedPassword,
     }).save();
 
-    res.send(me);
+    const token = jwt.sign({ id: me._id }, JWT_SECRET);
+    res.send({ user: me, token });
   });
 
   /**
@@ -168,6 +168,6 @@ export default (app) => {
       res.sendStatus(401);
     }
     const token = jwt.sign({ id: user._id }, JWT_SECRET);
-    res.send({ token });
+    res.send({ user, token });
   });
 }
