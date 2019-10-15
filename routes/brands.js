@@ -13,7 +13,8 @@ export default (app) => {
       .populate('numCars')
       .populate('numModels')
       .exec() || [];
-    res.send({ brands });
+    // TODO: Add popular brands filtering logic
+    res.send({ popularBrands: [], otherBrands: brands });
   });
 
   /**
@@ -26,7 +27,8 @@ export default (app) => {
       .populate('numCars')
       .populate('numModelDetails')
       .exec() || [];
-    res.send({ models });
+    // TODO: Add popular models filtering logic
+    res.send({ popularModels: [], otherModels: models });
   });
 
   /**

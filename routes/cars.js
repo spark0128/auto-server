@@ -14,6 +14,17 @@ export default (app) => {
   });
 
   /**
+   * @api {post} /cars/search/count SearchCarsCount
+   * @apiName SearchCarsCount
+   * @apiGroup Car
+   */
+  app.post('/v1/cars/search/count', async (req, res) => {
+    // TODO: Validate body
+    const count = await CarModel.count(req.body);
+    res.send({ count });
+  });
+
+  /**
    * @api {get} /cars/:carId GetCar
    * @apiName GetCar
    * @apiGroup Car
