@@ -3,6 +3,8 @@
  */
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { body, validationResult } from 'express-validator';
+import PhoneNumber from 'awesome-phonenumber';
 
 /**
  * Internal dependencies
@@ -18,16 +20,28 @@ const TWILIO_AUTH_TOKEN = '969e34dd9b98408f4e95eb14539fa801';
 
 const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
+// TODO: Change to KH (Cambodia)
+const COUNTRY_CODE = 'KR';
+
 export default (app) => {
   /**
    * @api {post} /verifications RequestVerification
    * @apiName RequestVerification
    * @apiGroup Auth
    */
-  app.post('/v1/verifications', async (req, res) => {
-    const { phoneNumber } = req.body;
-    // TODO: Validate params
+  app.post('/v1/verifications', [
+    body('phoneNumber').custom((value) => {
+      return new PhoneNumber(value, COUNTRY_CODE).isValid();
+    }).customSanitizer((value) => {
+      return new PhoneNumber(value, COUNTRY_CODE).getNumber('international');
+    })
+  ], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
+    const { phoneNumber } = req.body;
     const code = generateRandom6DigitNumber();
     const message = await client.messages
       .create({
@@ -50,10 +64,16 @@ export default (app) => {
    * @apiName ConfirmVerification
    * @apiGroup Auth
    */
-  app.put('/v1/verifications/:verificationId/confirm', async (req, res) => {
+  app.put('/v1/verifications/:verificationId/confirm', [
+    body('code').not().isEmpty()
+  ], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     const { verificationId } = req.params;
     const { code } = req.body;
-    // TODO: Validate params
 
     const verification = await PhoneVerificationModel.findById(verificationId);
     if (!verification) {
@@ -75,7 +95,22 @@ export default (app) => {
    * @apiName SignUp
    * @apiGroup Auth
    */
-  app.post('/v1/signup', async (req, res) => {
+  app.post('/v1/signup', [
+    body('firstName').not().isEmpty(),
+    body('lastName').not().isEmpty(),
+    body('phoneNumber').custom((value) => {
+      return new PhoneNumber(value, COUNTRY_CODE).isValid();
+    }).customSanitizer((value) => {
+      return new PhoneNumber(value, COUNTRY_CODE).getNumber('international');
+    }),
+    body('username').not().isEmpty(),
+    body('password').not().isEmpty(),
+  ], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     const {
       firstName,
       lastName,
@@ -83,7 +118,6 @@ export default (app) => {
       username,
       password,
     } = req.body;
-    // TODO: Validate params
 
     // Check phoneNumber verified
     const verification = await PhoneVerificationModel.findOne({ phoneNumber });
@@ -118,7 +152,15 @@ export default (app) => {
    * @apiName SignIn
    * @apiGroup Auth
    */
-  app.post('/v1/signin', async (req, res) => {
+  app.post('/v1/signin', [
+    body('username').not().isEmpty(),
+    body('password').not().isEmpty(),
+  ], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     const { username, password } = req.body;
     const user = await UserModel.findOne({ username });
     // Check password
