@@ -163,9 +163,14 @@ export default (app) => {
 
     const { username, password } = req.body;
     const user = await UserModel.findOne({ username });
+    if (!user) {
+      // TODO: Enhance error handling
+      return res.status(404).send({ message: 'Not found user' });
+    }
+
     // Check password
     if (user.password !== crypto.createHash('sha512').update(password).digest('base64')) {
-      res.sendStatus(401);
+      res.status(401).send({ message: 'Invalid password' });
     }
     const token = jwt.sign({ id: user._id }, JWT_SECRET);
     res.send({ user, token });
