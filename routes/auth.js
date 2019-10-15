@@ -13,12 +13,9 @@ import { UserModel } from '../models/User';
 import { PhoneVerificationModel } from '../models/PhoneVerification';
 import { generateRandom6DigitNumber } from '../libs/utils';
 
-// TODO: Extract to file
-export const JWT_SECRET = 'secret';
-const TWILIO_ACCOUNT_SID = 'AC542a2e9eda27a4afe49856d133b9253a';
-const TWILIO_AUTH_TOKEN = '969e34dd9b98408f4e95eb14539fa801';
+require('dotenv').config();
 
-const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // TODO: Change to KH (Cambodia)
 const COUNTRY_CODE = 'KR';
@@ -143,7 +140,7 @@ export default (app) => {
       password: encryptedPassword,
     }).save();
 
-    const token = jwt.sign({ id: me._id }, JWT_SECRET);
+    const token = jwt.sign({ id: me._id }, process.env.JWT_SECRET);
     res.send({ user: me, token });
   });
 
@@ -172,7 +169,7 @@ export default (app) => {
     if (user.password !== crypto.createHash('sha512').update(password).digest('base64')) {
       res.status(401).send({ message: 'Invalid password' });
     }
-    const token = jwt.sign({ id: user._id }, JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.send({ user, token });
   });
 }

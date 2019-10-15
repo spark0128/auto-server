@@ -7,7 +7,8 @@ import jwt from 'express-jwt';
  * Internal dependencies
  */
 import { UserModel } from '../models/User';
-import { JWT_SECRET } from './auth';
+
+require('dotenv').config();
 
 export default (app) => {
   /**
@@ -15,7 +16,7 @@ export default (app) => {
    * @apiName GetMe
    * @apiGroup User
    */
-  app.get('/v1/users/me', jwt({ secret: JWT_SECRET }), async (req, res) => {
+  app.get('/v1/users/me', jwt({ secret: process.env.JWT_SECRET }), async (req, res) => {
     const me = await UserModel.findById(req.user.id);
     res.send(me);
   });
@@ -25,7 +26,7 @@ export default (app) => {
    * @apiName UpdateMe
    * @apiGroup User
    */
-  app.put('/v1/users/me', jwt({ secret: JWT_SECRET }), async (req, res) => {
+  app.put('/v1/users/me', jwt({ secret: process.env.JWT_SECRET }), async (req, res) => {
     const {
       phoneNumber,
       email,
